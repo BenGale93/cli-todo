@@ -1,0 +1,26 @@
+[package]
+authors = ["Ben Askew-Gale <bengale2007@googlemail.com>"]
+name = "cli-todo"
+categories = ["command-line-utilities"]
+description = "A CLI based todo tool for adding entries on the fly."
+keywords = ["todo"]
+readme = "./README.md"
+repository = "https://github.com/BenGale93/cli-todo"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[[bin]]
+name = "todo"
+path = "src/bin/todo/main.rs"
+
+[lib]
+name = "todo"
+path = "src/todo/lib.rs"
+
+[dependencies]
+thiserror = "1.0.40"
+
+[dev-dependencies]
