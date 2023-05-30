@@ -5,4 +5,10 @@ pub enum ToDoError {
 
     #[error(transparent)]
     IO(#[from] std::io::Error),
+
+    #[error(transparent)]
+    Sql(#[from] rusqlite::Error),
+
+    #[error(transparent)]
+    Config(#[from] confy::ConfyError),
 }
