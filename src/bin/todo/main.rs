@@ -1,5 +1,4 @@
 use clap::{Parser, Subcommand};
-use commands::run_init_command;
 use todo::prelude::*;
 
 mod commands;
@@ -13,7 +12,7 @@ struct ToDoCli {
 #[derive(Subcommand)]
 enum ToDoCommands {
     Init(commands::InitArgs),
-    Add,
+    Add(commands::AddArgs),
     Edit,
     Done,
     List,
@@ -23,8 +22,8 @@ fn main() -> Result<()> {
     let cli = ToDoCli::parse();
 
     match &cli.command {
-        ToDoCommands::Init(init_args) => run_init_command(init_args),
-        ToDoCommands::Add => todo!(),
+        ToDoCommands::Init(init_args) => init_args.run(),
+        ToDoCommands::Add(add_args) => add_args.run(),
         ToDoCommands::Edit => todo!(),
         ToDoCommands::Done => todo!(),
         ToDoCommands::List => todo!(),

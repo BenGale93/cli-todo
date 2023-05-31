@@ -10,7 +10,7 @@ pub fn initialize_todo_db<P: AsRef<Path>>(path: P) -> Result<()> {
     let conn = Connection::open(todo_db)?;
     let _ = conn.execute(
         "CREATE TABLE IF NOT EXISTS todo (
-            id INTEGER PRIMARY KEY,
+            name TEXT PRIMARY KEY,
             content TEXT NOT NULL,
             due DATETIME NOT NULL,
             status TEXT NOT NULL
