@@ -21,7 +21,7 @@ enum ToDoCommands {
 fn main() -> Result<()> {
     let cli = ToDoCli::parse();
 
-    match &cli.command {
+    match cli.command {
         ToDoCommands::Init(init_args) => init_args.run(),
         ToDoCommands::Add(add_args) => add_args.run(),
         ToDoCommands::Edit => todo!(),

@@ -12,15 +12,10 @@ pub struct AddArgs {
 }
 
 impl AddArgs {
-    pub fn run(&self) -> Result<()> {
+    pub fn run(self) -> Result<()> {
         let cfg: ToDoConfig = confy::load(APP_NAME, None)?;
         let conn = Connection::open(cfg.db_path())?;
-        let todo = ToDo::new(
-            self.name.clone(),
-            self.content.clone(),
-            self.due,
-            Status::Due,
-        );
+        let todo = ToDo::new(self.name, self.content, self.due, Status::Due);
         add_todo(&todo, &conn)?;
         Ok(())
     }
