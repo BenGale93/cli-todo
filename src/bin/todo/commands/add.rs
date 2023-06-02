@@ -1,7 +1,8 @@
 use chrono::{DateTime, Utc};
 use clap::Args;
-use rusqlite::Connection;
 use todo::prelude::*;
+
+use crate::commands::get_connection;
 
 #[derive(Args)]
 pub struct AddArgs {
@@ -13,8 +14,7 @@ pub struct AddArgs {
 
 impl AddArgs {
     pub fn run(self) -> Result<()> {
-        let cfg: ToDoConfig = confy::load(APP_NAME, None)?;
-        let conn = Connection::open(cfg.db_path())?;
+        let conn = get_connection()?;
         let todo = ToDo::new(self.name, self.content, self.due, Status::Due);
         add_todo(&todo, &conn)?;
         Ok(())

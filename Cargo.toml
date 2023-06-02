@@ -27,6 +27,7 @@ confy = "0.5.1"
 directories = "5.0.1"
 rusqlite = { version = "0.29.0", features = ["bundled", "chrono"] }
 serde = { version = "1.0.163", features = ["serde_derive"] }
+tabled = "0.12.0"
 thiserror = "1.0.40"
 
 [dev-dependencies]

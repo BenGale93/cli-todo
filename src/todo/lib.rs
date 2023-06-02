@@ -1,6 +1,7 @@
 pub mod add;
 pub mod error;
 pub mod init;
+pub mod list;
 
 pub mod prelude {
     pub const APP_NAME: &str = "todo";
@@ -8,20 +9,23 @@ pub mod prelude {
     use std::{fmt, path::PathBuf};
 
     use chrono::{DateTime, Utc};
+    use clap::ValueEnum;
     use directories::BaseDirs;
     use serde::{Deserialize, Serialize};
+    use tabled::Tabled;
 
-    pub use crate::{add::add_todo, error::ToDoError, init::initialize_todo_db};
+    pub use crate::{add::add_todo, error::ToDoError, init::initialize_todo_db, list::list_todos};
 
     pub type Result<T> = core::result::Result<T, ToDoError>;
 
-    #[derive(Debug, Serialize, Deserialize, PartialEq)]
+    #[derive(Debug, Serialize, Deserialize, PartialEq, ValueEnum, Clone, Copy, Tabled)]
     pub enum Status {
         Due,
         Overdue,
         InProgress,
         Done,
     }
+
     impl fmt::Display for Status {
         fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
             match self {
@@ -47,7 +51,7 @@ pub mod prelude {
         }
     }
 
-    #[derive(Debug, Serialize, Deserialize)]
+    #[derive(Debug, Serialize, Deserialize, Tabled)]
     pub struct ToDo {
         name: String,
         content: String,

@@ -15,7 +15,7 @@ enum ToDoCommands {
     Add(commands::AddArgs),
     Edit,
     Done,
-    List,
+    List(commands::ListArgs),
 }
 
 fn main() -> Result<()> {
@@ -26,6 +26,6 @@ fn main() -> Result<()> {
         ToDoCommands::Add(add_args) => add_args.run(),
         ToDoCommands::Edit => todo!(),
         ToDoCommands::Done => todo!(),
-        ToDoCommands::List => todo!(),
+        ToDoCommands::List(list_args) => list_args.run(),
     }
 }
