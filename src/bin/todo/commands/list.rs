@@ -16,7 +16,8 @@ impl ListArgs {
     pub fn run(self) -> Result<()> {
         let conn = get_connection()?;
         let todos = list_todos(self.status, self.due, &conn)?;
-        let table = tabled::Table::new(todos);
+        let todo_rows: Vec<ToDoRow> = todos.into_iter().map(|t| t.into()).collect();
+        let table = tabled::Table::new(todo_rows);
         println!("{}", table);
         Ok(())
     }

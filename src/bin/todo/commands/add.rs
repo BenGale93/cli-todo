@@ -15,7 +15,7 @@ pub struct AddArgs {
 impl AddArgs {
     pub fn run(self) -> Result<()> {
         let conn = get_connection()?;
-        let todo = ToDo::new(self.name, self.content, self.due, Status::Due);
+        let todo = ToDo::new(self.name, self.content, self.due, Status::ToDo);
         add_todo(&todo, &conn)?;
         Ok(())
     }

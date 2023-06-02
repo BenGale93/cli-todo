@@ -18,10 +18,9 @@ pub mod prelude {
 
     pub type Result<T> = core::result::Result<T, ToDoError>;
 
-    #[derive(Debug, Serialize, Deserialize, PartialEq, ValueEnum, Clone, Copy, Tabled)]
+    #[derive(Debug, PartialEq, ValueEnum, Clone, Copy)]
     pub enum Status {
-        Due,
-        Overdue,
+        ToDo,
         InProgress,
         Done,
     }
@@ -29,10 +28,9 @@ pub mod prelude {
     impl fmt::Display for Status {
         fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
             match self {
-                Status::Due => write!(f, "Due"),
-                Status::Overdue => write!(f, "Overdue"),
-                Status::InProgress => write!(f, "In Progress"),
-                Status::Done => write!(f, "Done"),
+                Self::ToDo => write!(f, "To Do"),
+                Self::InProgress => write!(f, "In Progress"),
+                Self::Done => write!(f, "Done"),
             }
         }
     }
@@ -42,8 +40,7 @@ pub mod prelude {
 
         fn from_str(input: &str) -> Result<Self> {
             match input {
-                "Due" => Ok(Self::Due),
-                "Overdue" => Ok(Self::Overdue),
+                "To Do" => Ok(Self::ToDo),
                 "In Progress" => Ok(Self::InProgress),
                 "Done" => Ok(Self::Done),
                 i => Err(ToDoError::Generic(format!("Unrecognized status: {}", i))),
@@ -51,7 +48,22 @@ pub mod prelude {
         }
     }
 
-    #[derive(Debug, Serialize, Deserialize, Tabled)]
+    #[derive(Debug, PartialEq, Clone, Copy)]
+    pub enum DueStatus {
+        Due,
+        Overdue,
+    }
+
+    impl fmt::Display for DueStatus {
+        fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+            match self {
+                Self::Due => write!(f, "Due"),
+                Self::Overdue => write!(f, "Overdue"),
+            }
+        }
+    }
+
+    #[derive(Debug)]
     pub struct ToDo {
         name: String,
         content: String,
@@ -83,6 +95,33 @@ pub mod prelude {
 
         pub fn status(&self) -> &Status {
             &self.status
+        }
+    }
+
+    #[derive(Debug, Tabled)]
+    pub struct ToDoRow {
+        name: String,
+        content: String,
+        due: DateTime<Utc>,
+        status: Status,
+        due_status: DueStatus,
+    }
+
+    impl From<ToDo> for ToDoRow {
+        fn from(value: ToDo) -> Self {
+            let due_status = if value.due() >= Utc::now() {
+                DueStatus::Due
+            } else {
+                DueStatus::Overdue
+            };
+
+            ToDoRow {
+                name: value.name,
+                content: value.content,
+                due: value.due,
+                status: value.status,
+                due_status,
+            }
         }
     }
 
