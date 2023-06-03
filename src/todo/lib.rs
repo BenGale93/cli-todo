@@ -1,5 +1,6 @@
 pub mod add;
 pub mod error;
+pub mod go;
 pub mod init;
 pub mod list;
 
@@ -14,7 +15,9 @@ pub mod prelude {
     use serde::{Deserialize, Serialize};
     use tabled::Tabled;
 
-    pub use crate::{add::add_todo, error::ToDoError, init::initialize_todo_db, list::list_todos};
+    pub use crate::{
+        add::add_todo, error::ToDoError, go::go_todo, init::initialize_todo_db, list::list_todos,
+    };
 
     pub type Result<T> = core::result::Result<T, ToDoError>;
 
@@ -52,6 +55,7 @@ pub mod prelude {
     pub enum DueStatus {
         Due,
         Overdue,
+        Done,
     }
 
     impl fmt::Display for DueStatus {
@@ -59,6 +63,7 @@ pub mod prelude {
             match self {
                 Self::Due => write!(f, "Due"),
                 Self::Overdue => write!(f, "Overdue"),
+                Self::Done => write!(f, "Done"),
             }
         }
     }
@@ -109,7 +114,9 @@ pub mod prelude {
 
     impl From<ToDo> for ToDoRow {
         fn from(value: ToDo) -> Self {
-            let due_status = if value.due() >= Utc::now() {
+            let due_status = if matches!(value.status(), Status::Done) {
+                DueStatus::Done
+            } else if value.due() >= Utc::now() {
                 DueStatus::Due
             } else {
                 DueStatus::Overdue
