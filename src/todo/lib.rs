@@ -4,6 +4,7 @@ pub mod error;
 pub mod go;
 pub mod init;
 pub mod list;
+pub mod rm;
 
 pub mod prelude {
     pub const APP_NAME: &str = "todo";
@@ -18,7 +19,7 @@ pub mod prelude {
 
     pub use crate::{
         add::add_todo, edit::edit_todo, error::ToDoError, go::go_todo, init::initialize_todo_db,
-        list::list_todos,
+        list::list_todos, rm::remove_todo,
     };
 
     pub type Result<T> = core::result::Result<T, ToDoError>;

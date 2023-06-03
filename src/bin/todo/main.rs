@@ -16,6 +16,7 @@ enum ToDoCommands {
     Edit(commands::EditArgs),
     Go(commands::GoArgs),
     List(commands::ListArgs),
+    Rm(commands::RemoveArgs),
 }
 
 fn main() -> Result<()> {
@@ -27,5 +28,6 @@ fn main() -> Result<()> {
         ToDoCommands::Edit(edit_args) => edit_args.run(),
         ToDoCommands::Go(go_args) => go_args.run(),
         ToDoCommands::List(list_args) => list_args.run(),
+        ToDoCommands::Rm(rm_args) => rm_args.run(),
     }
 }

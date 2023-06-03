@@ -3,13 +3,14 @@ pub mod edit;
 pub mod go;
 pub mod init;
 pub mod list;
+pub mod rm;
 
 use chrono::{DateTime, Utc};
 use rusqlite::Connection;
 use todo::prelude::*;
 
 pub use crate::commands::{
-    add::AddArgs, edit::EditArgs, go::GoArgs, init::InitArgs, list::ListArgs,
+    add::AddArgs, edit::EditArgs, go::GoArgs, init::InitArgs, list::ListArgs, rm::RemoveArgs,
 };
 
 pub fn get_connection() -> Result<Connection> {
