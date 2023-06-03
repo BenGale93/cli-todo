@@ -2,7 +2,7 @@ use chrono::{DateTime, Utc};
 use clap::Args;
 use todo::prelude::*;
 
-use crate::commands::get_connection;
+use crate::commands::{get_connection, parse_datetime};
 
 #[derive(Args)]
 pub struct AddArgs {
@@ -19,8 +19,4 @@ impl AddArgs {
         add_todo(&todo, &conn)?;
         Ok(())
     }
-}
-
-fn parse_datetime(arg: &str) -> std::result::Result<DateTime<Utc>, chrono::ParseError> {
-    Ok(DateTime::parse_from_str(arg, "%Y-%m-%d %H:%M:%S %z")?.into())
 }

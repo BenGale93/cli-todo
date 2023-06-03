@@ -1,4 +1,5 @@
 pub mod add;
+pub mod edit;
 pub mod error;
 pub mod go;
 pub mod init;
@@ -16,7 +17,8 @@ pub mod prelude {
     use tabled::Tabled;
 
     pub use crate::{
-        add::add_todo, error::ToDoError, go::go_todo, init::initialize_todo_db, list::list_todos,
+        add::add_todo, edit::edit_todo, error::ToDoError, go::go_todo, init::initialize_todo_db,
+        list::list_todos,
     };
 
     pub type Result<T> = core::result::Result<T, ToDoError>;
@@ -130,6 +132,13 @@ pub mod prelude {
                 due_status,
             }
         }
+    }
+
+    #[derive(Debug)]
+    pub struct ToDoPatch {
+        pub name: String,
+        pub content: Option<String>,
+        pub due: Option<DateTime<Utc>>,
     }
 
     #[derive(Debug, Serialize, Deserialize)]
