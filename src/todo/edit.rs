@@ -32,12 +32,9 @@ pub fn edit_todo(todo_patch: &ToDoPatch, conn: &Connection) -> Result<()> {
             println!("ToDo: '{}' changed successfully", todo_patch.name);
             Ok(())
         }
-        Err(Error::SqliteFailure(e, ec)) => match e.code {
-            ErrorCode::ConstraintViolation => Err(ToDoError::Generic(
-                "Your ToDo needs a unique name.".to_string(),
-            )),
-            _ => Err(Error::SqliteFailure(e, ec).into()),
-        },
+        Err(Error::SqliteFailure(e, _)) if matches!(e.code, ErrorCode::ConstraintViolation) => Err(
+            ToDoError::Generic("Your ToDo needs a unique name".to_string()),
+        ),
         Err(e) => Err(e.into()),
     }
 }
