@@ -1,5 +1,4 @@
 use clap::{Parser, Subcommand};
-use todo::prelude::*;
 
 mod commands;
 
@@ -19,15 +18,20 @@ enum ToDoCommands {
     Rm(commands::RemoveArgs),
 }
 
-fn main() -> Result<()> {
+fn main() {
+    pretty_env_logger::init();
     let cli = ToDoCli::parse();
 
-    match cli.command {
+    let result = match cli.command {
         ToDoCommands::Init(init_args) => init_args.run(),
         ToDoCommands::Add(add_args) => add_args.run(),
         ToDoCommands::Edit(edit_args) => edit_args.run(),
         ToDoCommands::Go(go_args) => go_args.run(),
         ToDoCommands::List(list_args) => list_args.run(),
         ToDoCommands::Rm(rm_args) => rm_args.run(),
+    };
+
+    if let Err(e) = result {
+        log::error!("{}", e);
     }
 }

@@ -11,7 +11,12 @@ pub struct RemoveArgs {
 impl RemoveArgs {
     pub fn run(self) -> Result<()> {
         let conn = get_connection()?;
-        remove_todo(self.name, &conn)?;
+        let result = remove_todo(&self.name, &conn)?;
+        if result > 0 {
+            println!("ToDo: '{}' removed successfully", &self.name);
+        } else {
+            println!("No ToDo named: '{}' was found", &self.name);
+        }
         Ok(())
     }
 }

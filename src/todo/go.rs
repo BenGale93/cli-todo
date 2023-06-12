@@ -4,7 +4,7 @@ use rusqlite::{Connection, Error};
 
 use crate::prelude::*;
 
-pub fn go_todo(name: String, conn: &Connection) -> Result<()> {
+pub fn go_todo(name: &str, conn: &Connection) -> Result<Status> {
     let mut stmt = conn.prepare("SELECT status FROM todo WHERE name = (?1)")?;
 
     let statuses = stmt.query_map([&name], |row| {
@@ -22,10 +22,13 @@ pub fn go_todo(name: String, conn: &Connection) -> Result<()> {
         Status::Done => Status::Done,
     };
 
-    let _ = conn.execute(
-        "UPDATE todo SET status = (?1) WHERE name = (?2)",
-        (new_status.to_string(), &name),
-    )?;
-    println!("Updated todo: '{name}' to status: '{new_status}'");
-    Ok(())
+    let mut stmt = conn.prepare("UPDATE todo SET status = (?1) WHERE name = (?2)")?;
+    let result = stmt.execute((new_status.to_string(), &name)).map(|_| ());
+
+    log::info!("{:?}", stmt.expanded_sql());
+
+    match result {
+        Ok(_) => Ok(new_status),
+        Err(e) => Err(e.into()),
+    }
 }

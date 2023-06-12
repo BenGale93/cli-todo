@@ -23,8 +23,11 @@ path = "src/todo/lib.rs"
 [dependencies]
 chrono = { version = "0.4.25", features = ["serde"] }
 clap = { version = "4.3.0", features = ["derive"] }
+colored = "2.0.0"
 confy = "0.5.1"
 directories = "5.0.1"
+log = "0.4.19"
+pretty_env_logger = "0.5.0"
 rusqlite = { version = "0.29.0", features = ["bundled", "chrono"] }
 serde = { version = "1.0.163", features = ["serde_derive"] }
 tabled = "0.12.0"

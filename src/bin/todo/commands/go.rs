@@ -1,4 +1,5 @@
 use clap::Args;
+use colored::Colorize;
 use todo::prelude::*;
 
 use crate::commands::get_connection;
@@ -11,7 +12,14 @@ pub struct GoArgs {
 impl GoArgs {
     pub fn run(self) -> Result<()> {
         let conn = get_connection()?;
-        go_todo(self.name, &conn)?;
+        match go_todo(&self.name, &conn) {
+            Ok(status) => println!(
+                "Updated todo: '{}' to status: '{}'",
+                &self.name.bold(),
+                status.to_string().yellow()
+            ),
+            Err(e) => return Err(e),
+        };
         Ok(())
     }
 }

@@ -35,12 +35,12 @@ pub fn edit_todo(todo_patch: &ToDoPatch, conn: &Connection) -> Result<()> {
 
     params.push(&todo_patch.name);
 
-    let result = conn.execute(&query, rusqlite::params_from_iter(params));
+    let mut stmt = conn.prepare(&query)?;
+    let result = stmt.execute(rusqlite::params_from_iter(params));
+
+    log::info!("{:?}", stmt.expanded_sql());
     match result {
-        Ok(_) => {
-            println!("ToDo: '{}' changed successfully", todo_patch.name);
-            Ok(())
-        }
+        Ok(_) => Ok(()),
         Err(Error::SqliteFailure(e, _)) if matches!(e.code, ErrorCode::ConstraintViolation) => Err(
             ToDoError::Generic("Your ToDo needs a unique name".to_string()),
         ),

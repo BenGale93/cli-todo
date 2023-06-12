@@ -15,6 +15,7 @@ pub use crate::commands::{
 
 pub fn get_connection() -> Result<Connection> {
     let cfg: ToDoConfig = confy::load(APP_NAME, None)?;
+    log::info!("Getting connection to: {}", cfg.db_path().display());
     Ok(Connection::open(cfg.db_path())?)
 }
 

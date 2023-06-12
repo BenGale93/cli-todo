@@ -1,5 +1,6 @@
 use chrono::{DateTime, Utc};
 use clap::Args;
+use colored::Colorize;
 use todo::prelude::*;
 
 use crate::commands::{get_connection, parse_datetime};
@@ -28,7 +29,14 @@ impl EditArgs {
             content: self.fields.content,
             due: self.fields.due,
         };
-        edit_todo(&todo_patch, &conn)?;
+        match edit_todo(&todo_patch, &conn) {
+            Ok(_) => println!(
+                "ToDo: '{}' changed {}",
+                todo_patch.name.bold(),
+                "successfully".green()
+            ),
+            Err(e) => return Err(e),
+        };
         Ok(())
     }
 }

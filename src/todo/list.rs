@@ -45,6 +45,6 @@ pub fn list_todos(
         ))
     })?;
     let result = todo_iter.collect::<Res<Vec<ToDo>, Error>>()?;
-    println!("{:?}", stmt.expanded_sql());
+    log::info!("{:?}", stmt.expanded_sql());
     Ok(result)
 }

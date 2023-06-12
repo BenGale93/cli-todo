@@ -1,5 +1,6 @@
 use chrono::{DateTime, Utc};
 use clap::Args;
+use colored::Colorize;
 use todo::prelude::*;
 
 use crate::commands::{get_connection, parse_datetime};
@@ -16,7 +17,14 @@ impl AddArgs {
     pub fn run(self) -> Result<()> {
         let conn = get_connection()?;
         let todo = ToDo::new(self.name, self.content, self.due, Status::ToDo);
-        add_todo(&todo, &conn)?;
+        match add_todo(&todo, &conn) {
+            Ok(_) => println!(
+                "ToDo: '{}' added {}",
+                todo.name().bold(),
+                "successfully".green()
+            ),
+            Err(e) => return Err(e),
+        };
         Ok(())
     }
 }
