@@ -1,4 +1,4 @@
-use chrono::{DateTime, Utc};
+use chrono::NaiveDateTime;
 use clap::Args;
 use colored::Colorize;
 use todo::prelude::*;
@@ -18,7 +18,7 @@ struct Fields {
     #[arg(short)]
     content: Option<String>,
     #[arg(short, value_parser = parse_datetime)]
-    due: Option<DateTime<Utc>>,
+    due: Option<NaiveDateTime>,
 }
 
 impl EditArgs {

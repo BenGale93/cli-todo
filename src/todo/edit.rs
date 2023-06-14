@@ -29,7 +29,7 @@ pub fn edit_todo(todo_patch: &ToDoPatch, conn: &Connection) -> Result<()> {
 
     let date: String;
     if let Some(d) = &todo_patch.due {
-        date = d.format("%F %T%.f%:z").to_string();
+        date = d.format("%F %T%.f").to_string();
         params.push(&date);
     }
 

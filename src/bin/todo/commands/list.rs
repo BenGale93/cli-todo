@@ -1,4 +1,4 @@
-use chrono::{DateTime, Utc};
+use chrono::NaiveDateTime;
 use clap::Args;
 use todo::prelude::*;
 
@@ -9,7 +9,7 @@ pub struct ListArgs {
     #[arg(short, long)]
     status: Option<Vec<Status>>,
     #[arg(short, long)]
-    due: Option<DateTime<Utc>>,
+    due: Option<NaiveDateTime>,
 }
 
 impl ListArgs {

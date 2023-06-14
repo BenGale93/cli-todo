@@ -1,4 +1,4 @@
-use chrono::{DateTime, Utc};
+use chrono::NaiveDateTime;
 use clap::Args;
 use colored::Colorize;
 use todo::prelude::*;
@@ -10,7 +10,7 @@ pub struct AddArgs {
     name: String,
     content: String,
     #[arg(value_parser = parse_datetime)]
-    due: DateTime<Utc>,
+    due: NaiveDateTime,
 }
 
 impl AddArgs {

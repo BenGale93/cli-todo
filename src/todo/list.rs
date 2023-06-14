@@ -1,13 +1,13 @@
 use core::result::Result as Res;
 
-use chrono::{DateTime, Utc};
+use chrono::NaiveDateTime;
 use rusqlite::{Connection, Error};
 
 use crate::prelude::*;
 
 pub fn list_todos(
     status: Option<Vec<Status>>,
-    datetime: Option<DateTime<Utc>>,
+    datetime: Option<NaiveDateTime>,
     conn: &Connection,
 ) -> Result<Vec<ToDo>> {
     let datetime_where = datetime.map(|d| format!("due<='{}'", d.to_string()));
@@ -40,7 +40,7 @@ pub fn list_todos(
         Ok(ToDo::new(
             row.get(0)?,
             row.get(1)?,
-            row.get::<usize, DateTime<Utc>>(2)?,
+            row.get::<usize, NaiveDateTime>(2)?,
             row.get::<usize, String>(3)?.parse().unwrap(),
         ))
     })?;

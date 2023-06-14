@@ -5,7 +5,7 @@ pub mod init;
 pub mod list;
 pub mod rm;
 
-use chrono::{DateTime, Utc};
+use chrono::NaiveDateTime;
 use rusqlite::Connection;
 use todo::prelude::*;
 
@@ -19,6 +19,6 @@ pub fn get_connection() -> Result<Connection> {
     Ok(Connection::open(cfg.db_path())?)
 }
 
-fn parse_datetime(arg: &str) -> std::result::Result<DateTime<Utc>, chrono::ParseError> {
-    Ok(DateTime::parse_from_str(arg, "%Y-%m-%d %H:%M:%S %z")?.into())
+fn parse_datetime(arg: &str) -> std::result::Result<NaiveDateTime, chrono::ParseError> {
+    arg.parse()
 }

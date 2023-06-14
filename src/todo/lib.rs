@@ -11,7 +11,7 @@ pub mod prelude {
 
     use std::{fmt, path::PathBuf};
 
-    use chrono::{DateTime, Utc};
+    use chrono::{Local, NaiveDateTime};
     use clap::ValueEnum;
     use directories::BaseDirs;
     use serde::{Deserialize, Serialize};
@@ -75,12 +75,12 @@ pub mod prelude {
     pub struct ToDo {
         name: String,
         content: String,
-        due: DateTime<Utc>,
+        due: NaiveDateTime,
         status: Status,
     }
 
     impl ToDo {
-        pub fn new(name: String, content: String, due: DateTime<Utc>, status: Status) -> Self {
+        pub fn new(name: String, content: String, due: NaiveDateTime, status: Status) -> Self {
             Self {
                 name,
                 content,
@@ -97,7 +97,7 @@ pub mod prelude {
             self.content.as_ref()
         }
 
-        pub fn due(&self) -> DateTime<Utc> {
+        pub fn due(&self) -> NaiveDateTime {
             self.due
         }
 
@@ -110,7 +110,7 @@ pub mod prelude {
     pub struct ToDoRow {
         name: String,
         content: String,
-        due: DateTime<Utc>,
+        due: NaiveDateTime,
         status: Status,
         due_status: DueStatus,
     }
@@ -119,7 +119,7 @@ pub mod prelude {
         fn from(value: ToDo) -> Self {
             let due_status = if matches!(value.status(), Status::Done) {
                 DueStatus::Done
-            } else if value.due() >= Utc::now() {
+            } else if value.due() >= Local::now().naive_local() {
                 DueStatus::Due
             } else {
                 DueStatus::Overdue
@@ -139,7 +139,7 @@ pub mod prelude {
     pub struct ToDoPatch {
         pub name: String,
         pub content: Option<String>,
-        pub due: Option<DateTime<Utc>>,
+        pub due: Option<NaiveDateTime>,
     }
 
     #[derive(Debug, Serialize, Deserialize)]
