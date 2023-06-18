@@ -10,5 +10,8 @@ pub enum ToDoError {
     Sql(#[from] rusqlite::Error),
 
     #[error(transparent)]
+    Chrono(#[from] chrono::ParseError),
+
+    #[error(transparent)]
     Config(#[from] confy::ConfyError),
 }
