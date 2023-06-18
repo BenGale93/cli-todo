@@ -1,3 +1,4 @@
+#![warn(clippy::all, clippy::nursery)]
 pub mod add;
 pub mod due;
 pub mod edit;
@@ -25,7 +26,7 @@ pub mod prelude {
 
     pub type Result<T> = core::result::Result<T, ToDoError>;
 
-    #[derive(Debug, PartialEq, ValueEnum, Clone, Copy)]
+    #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, ValueEnum, Clone, Copy)]
     pub enum Status {
         ToDo,
         InProgress,
@@ -55,7 +56,7 @@ pub mod prelude {
         }
     }
 
-    #[derive(Debug, PartialEq, Clone, Copy)]
+    #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
     pub enum DueStatus {
         Due,
         Overdue,
@@ -81,7 +82,12 @@ pub mod prelude {
     }
 
     impl ToDo {
-        pub fn new(name: String, content: String, due: NaiveDateTime, status: Status) -> Self {
+        pub const fn new(
+            name: String,
+            content: String,
+            due: NaiveDateTime,
+            status: Status,
+        ) -> Self {
             Self {
                 name,
                 content,
@@ -98,11 +104,11 @@ pub mod prelude {
             self.content.as_ref()
         }
 
-        pub fn due(&self) -> NaiveDateTime {
+        pub const fn due(&self) -> NaiveDateTime {
             self.due
         }
 
-        pub fn status(&self) -> &Status {
+        pub const fn status(&self) -> &Status {
             &self.status
         }
     }
@@ -126,7 +132,7 @@ pub mod prelude {
                 DueStatus::Overdue
             };
 
-            ToDoRow {
+            Self {
                 name: value.name,
                 content: value.content,
                 due: value.due,
@@ -149,11 +155,11 @@ pub mod prelude {
     }
 
     impl ToDoConfig {
-        pub fn new(db_path: PathBuf) -> Self {
+        pub const fn new(db_path: PathBuf) -> Self {
             Self { db_path }
         }
 
-        pub fn db_path(&self) -> &PathBuf {
+        pub const fn db_path(&self) -> &PathBuf {
             &self.db_path
         }
     }

@@ -53,21 +53,23 @@ impl FromStr for Frequency {
 impl Frequency {
     fn parse(input: &str) -> IResult<&str, Self> {
         let (next_input, freq_code) = one_of("dwmyDWMY")(input)?;
-        match freq_code.to_string().parse() {
-            Ok(f) => Ok((next_input, f)),
-            Err(_) => Err(nom::Err::Error(nom::error::Error::new(
-                input,
-                nom::error::ErrorKind::Char,
-            ))),
-        }
+        freq_code.to_string().parse().map_or_else(
+            |_| {
+                Err(nom::Err::Error(nom::error::Error::new(
+                    input,
+                    nom::error::ErrorKind::Char,
+                )))
+            },
+            |f| Ok((next_input, f)),
+        )
     }
 
     fn duration(&self, length: u32) -> RelativeDuration {
         match self {
-            Frequency::Day => RelativeDuration::days(length as i64),
-            Frequency::Week => RelativeDuration::weeks(length as i64),
-            Frequency::Month => RelativeDuration::months(length as i32),
-            Frequency::Year => RelativeDuration::years(length as i32),
+            Self::Day => RelativeDuration::days(length as i64),
+            Self::Week => RelativeDuration::weeks(length as i64),
+            Self::Month => RelativeDuration::months(length as i32),
+            Self::Year => RelativeDuration::years(length as i32),
         }
     }
 }
@@ -89,7 +91,7 @@ struct Offset {
 
 impl Offset {
     #[allow(dead_code)]
-    fn new(length: u32, freq: Frequency, time: Option<NaiveTime>) -> Self {
+    const fn new(length: u32, freq: Frequency, time: Option<NaiveTime>) -> Self {
         Self { length, freq, time }
     }
 
@@ -104,10 +106,10 @@ impl Offset {
         let relative_duration = self.freq.duration(self.length);
         let due_datetime = *datetime + relative_duration;
 
-        match self.time {
-            Some(time) => NaiveDateTime::new(due_datetime.date(), time),
-            None => due_datetime.round_subsecs(0),
-        }
+        self.time.map_or_else(
+            || due_datetime.round_subsecs(0),
+            |time| NaiveDateTime::new(due_datetime.date(), time),
+        )
     }
 }
 
@@ -121,13 +123,16 @@ fn parse_weekday(input: &str) -> IResult<&str, Weekday> {
         tag_no_case("sat"),
         tag_no_case("sun"),
     ))(input)?;
-    match weekday.parse() {
-        Ok(w) => Ok((next_input, w)),
-        Err(_) => Err(nom::Err::Error(nom::error::Error::new(
-            input,
-            nom::error::ErrorKind::Tag,
-        ))),
-    }
+
+    weekday.parse().map_or_else(
+        |_| {
+            Err(nom::Err::Error(nom::error::Error::new(
+                input,
+                nom::error::ErrorKind::Tag,
+            )))
+        },
+        |w| Ok((next_input, w)),
+    )
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -138,7 +143,7 @@ struct NextDay {
 
 impl NextDay {
     #[allow(dead_code)]
-    fn new(day: Weekday, time: Option<NaiveTime>) -> Self {
+    const fn new(day: Weekday, time: Option<NaiveTime>) -> Self {
         Self { day, time }
     }
 
@@ -164,10 +169,10 @@ impl NextDay {
 
         let due_datetime = *datetime + RelativeDuration::days(offset);
 
-        match self.time {
-            Some(time) => NaiveDateTime::new(due_datetime.date(), time),
-            None => due_datetime.round_subsecs(0),
-        }
+        self.time.map_or_else(
+            || due_datetime.round_subsecs(0),
+            |time| NaiveDateTime::new(due_datetime.date(), time),
+        )
     }
 }
 

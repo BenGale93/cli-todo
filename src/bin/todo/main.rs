@@ -1,3 +1,4 @@
+#![warn(clippy::all, clippy::nursery)]
 use clap::{Parser, Subcommand};
 
 mod commands;

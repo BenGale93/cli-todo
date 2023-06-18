@@ -12,17 +12,14 @@ pub fn list_todos(
 ) -> Result<Vec<ToDo>> {
     let datetime_where = datetime.map(|d| format!("due<='{}'", d.to_string()));
 
-    let status_where = match status {
-        Some(s) => {
-            let v = s
-                .into_iter()
-                .map(|e| format!("'{}'", e))
-                .collect::<Vec<String>>()
-                .join(", ");
-            Some(format!("status in ({})", v))
-        }
-        None => None,
-    };
+    let status_where = status.map(|s| {
+        let v = s
+            .into_iter()
+            .map(|e| format!("'{}'", e))
+            .collect::<Vec<String>>()
+            .join(", ");
+        format!("status in ({})", v)
+    });
 
     let where_clause = [datetime_where, status_where]
         .into_iter()
