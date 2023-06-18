@@ -6,6 +6,7 @@ use crate::commands::get_connection;
 
 #[derive(Args)]
 pub struct GoArgs {
+    /// Name of the todo to advance to the next status. ToDo => In-Progress => Done.
     name: String,
 }
 

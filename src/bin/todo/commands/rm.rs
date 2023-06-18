@@ -5,6 +5,7 @@ use crate::commands::get_connection;
 
 #[derive(Args)]
 pub struct RemoveArgs {
+    /// Name of the todo to delete.
     name: String,
 }
 

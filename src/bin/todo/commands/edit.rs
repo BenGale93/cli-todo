@@ -7,6 +7,7 @@ use crate::commands::{get_connection, parse_datetime};
 
 #[derive(Args)]
 pub struct EditArgs {
+    /// Name of the todo to edit.
     name: String,
     #[command(flatten)]
     fields: Fields,
@@ -15,8 +16,22 @@ pub struct EditArgs {
 #[derive(Args)]
 #[group(required = true)]
 struct Fields {
+    /// The new content of the todo.
     #[arg(short)]
     content: Option<String>,
+    /// When the todo is now due.
+    ///
+    /// Acceptable formats include:
+    ///
+    /// %Y-%m-%d %H%M
+    ///
+    /// Short day code: e.g. Mon
+    ///
+    /// Short day code and time: e.g. Mon1700
+    ///
+    /// Count and frequency: e.g. 2d, 1w, 3m, 4y.
+    ///
+    /// Count, frequency and time: e.g. 2d1700.
     #[arg(short, value_parser = parse_datetime)]
     due: Option<NaiveDateTime>,
 }

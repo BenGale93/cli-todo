@@ -4,6 +4,7 @@ use clap::{Parser, Subcommand};
 mod commands;
 
 #[derive(Parser)]
+#[command(about = "Manage todos from the CLI.")]
 struct ToDoCli {
     #[command(subcommand)]
     command: ToDoCommands,
@@ -11,11 +12,17 @@ struct ToDoCli {
 
 #[derive(Subcommand)]
 enum ToDoCommands {
+    /// Initialise a new todo database.
     Init(commands::InitArgs),
+    /// Add a new todo to your list.
     Add(commands::AddArgs),
+    /// Edit an existing todo.
     Edit(commands::EditArgs),
+    /// Progress a todo to the next status.
     Go(commands::GoArgs),
+    /// List your todos.
     List(commands::ListArgs),
+    /// Delete a todo.
     Rm(commands::RemoveArgs),
 }
 

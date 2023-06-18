@@ -5,8 +5,10 @@ use todo::prelude::*;
 
 #[derive(Args)]
 pub struct InitArgs {
+    /// Location and name of the database file.
     #[arg(short, long, value_name = "FILE")]
     database: Option<PathBuf>,
+    /// Whether to force the creation of a new database even if one exists.
     #[arg(short, long)]
     force: bool,
 }

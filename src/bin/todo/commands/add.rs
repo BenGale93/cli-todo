@@ -7,8 +7,23 @@ use crate::commands::{get_connection, parse_datetime};
 
 #[derive(Args)]
 pub struct AddArgs {
+    /// A short name for the todo.
     name: String,
+    /// What you actually need to do.
     content: String,
+    /// When the todo is due.
+    ///
+    /// Acceptable formats include:
+    ///
+    /// %Y-%m-%d %H%M
+    ///
+    /// Short day code: e.g. Mon
+    ///
+    /// Short day code and time: e.g. Mon1700
+    ///
+    /// Count and frequency: e.g. 2d, 1w, 3m, 4y.
+    ///
+    /// Count, frequency and time: e.g. 2d1700.
     #[arg(value_parser = parse_datetime)]
     due: NaiveDateTime,
 }

@@ -6,8 +6,10 @@ use crate::commands::get_connection;
 
 #[derive(Args)]
 pub struct ListArgs {
+    /// Status to filter the full list on.
     #[arg(short, long)]
     status: Option<Vec<Status>>,
+    /// Due date to filter on. Displays those due before the date given.
     #[arg(short, long)]
     due: Option<NaiveDateTime>,
 }
