@@ -21,7 +21,7 @@ name = "todo"
 path = "src/todo/lib.rs"
 
 [dependencies]
-chrono = { version = "0.4.25", features = ["serde"] }
+chrono = { version = "0.4.26", features = ["serde"] }
 chronoutil = "0.2.4"
 clap = { version = "4.3.0", features = ["derive"] }
 colored = "2.0.0"
