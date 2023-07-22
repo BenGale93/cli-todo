@@ -16,9 +16,9 @@ pub fn add_todo(todo: &ToDo, conn: &Connection) -> Result<()> {
     log::info!("{:?}", stmt.expanded_sql());
     match result {
         Ok(_) => Ok(()),
-        Err(Error::SqliteFailure(e, _)) if matches!(e.code, ErrorCode::ConstraintViolation) => Err(
-            ToDoError::Generic("Your ToDo needs a unique name".to_string()),
-        ),
+        Err(Error::SqliteFailure(e, _)) if matches!(e.code, ErrorCode::ConstraintViolation) => {
+            Err(ToDoError::UniqueName(todo.name().to_string()))
+        }
         Err(e) => Err(e.into()),
     }
 }

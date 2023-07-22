@@ -16,7 +16,7 @@ pub struct InitArgs {
 impl InitArgs {
     pub fn run(&self) -> Result<()> {
         if !self.force && confy::get_configuration_file_path(APP_NAME, None)?.exists() {
-            return Err(ToDoError::Generic("Config already exists.".to_string()));
+            return Err(ToDoError::ConfigExists);
         }
         let cfg = self
             .database

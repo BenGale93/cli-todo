@@ -1,4 +1,4 @@
-use rusqlite::{Connection, Error, ErrorCode};
+use rusqlite::Connection;
 
 use crate::prelude::*;
 
@@ -17,7 +17,7 @@ pub fn edit_todo(todo_patch: &ToDoPatch, conn: &Connection) -> Result<()> {
         .join(", ");
 
     let query = match set_clause.as_str() {
-        "" => return Err(ToDoError::Generic("Nothing to update".to_string())),
+        "" => return Err(ToDoError::OptionMissing),
         _ => format!("UPDATE todo SET {set_clause} WHERE name = ?"),
     };
 
@@ -40,10 +40,8 @@ pub fn edit_todo(todo_patch: &ToDoPatch, conn: &Connection) -> Result<()> {
 
     log::info!("{:?}", stmt.expanded_sql());
     match result {
+        Ok(0) => Err(ToDoError::NotFound),
         Ok(_) => Ok(()),
-        Err(Error::SqliteFailure(e, _)) if matches!(e.code, ErrorCode::ConstraintViolation) => Err(
-            ToDoError::Generic("Your ToDo needs a unique name".to_string()),
-        ),
         Err(e) => Err(e.into()),
     }
 }

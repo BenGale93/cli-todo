@@ -51,7 +51,7 @@ pub mod prelude {
                 "To Do" => Ok(Self::ToDo),
                 "In Progress" => Ok(Self::InProgress),
                 "Done" => Ok(Self::Done),
-                i => Err(ToDoError::Generic(format!("Unrecognized status: {}", i))),
+                i => Err(ToDoError::UnrecognisedStatus(i.to_string())),
             }
         }
     }

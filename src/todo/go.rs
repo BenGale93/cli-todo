@@ -12,9 +12,7 @@ pub fn go_todo(name: &str, conn: &Connection) -> Result<Status> {
     })?;
 
     let statuses = statuses.collect::<Res<Vec<Status>, Error>>()?;
-    let status = statuses
-        .first()
-        .ok_or(ToDoError::Generic("To Do not found".to_string()))?;
+    let status = statuses.first().ok_or(ToDoError::NotFound)?;
 
     let new_status = match status {
         Status::ToDo => Status::InProgress,

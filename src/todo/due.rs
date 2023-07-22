@@ -43,9 +43,7 @@ impl FromStr for Frequency {
             "w" => Ok(Self::Week),
             "m" => Ok(Self::Month),
             "y" => Ok(Self::Year),
-            _ => Err(ToDoError::Generic(
-                "Unrecognised date code frequency.".to_string(),
-            )),
+            _ => Err(ToDoError::DateCode(s.to_string())),
         }
     }
 }
@@ -190,7 +188,7 @@ impl DateCode {
         if let Ok(("", n)) = NextDay::parse(input) {
             return Ok(Self::NextDay(n));
         };
-        Err(ToDoError::Generic("Date code parse error".to_string()))
+        Err(ToDoError::DateCode(input.to_string()))
     }
 
     fn due_datetime(&self, datetime: &NaiveDateTime) -> NaiveDateTime {
