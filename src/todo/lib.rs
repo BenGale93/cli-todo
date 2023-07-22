@@ -7,6 +7,7 @@ pub mod go;
 pub mod init;
 pub mod list;
 pub mod rm;
+mod sql_utils;
 
 pub mod prelude {
     pub const APP_NAME: &str = "todo";
@@ -20,8 +21,13 @@ pub mod prelude {
     use tabled::Tabled;
 
     pub use crate::{
-        add::add_todo, edit::edit_todo, error::ToDoError, go::go_todo, init::initialize_todo_db,
-        list::list_todos, rm::remove_todo,
+        add::add_todo,
+        edit::edit_todo,
+        error::ToDoError,
+        go::go_todo,
+        init::initialize_todo_db,
+        list::list_todos,
+        rm::{remove_done, remove_todo},
     };
 
     pub type Result<T> = core::result::Result<T, ToDoError>;
