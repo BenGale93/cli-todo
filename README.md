@@ -29,3 +29,25 @@ todo go email # Now in progress
 
 todo go email # Now finished.
 ```
+
+### Watch command
+
+The watch command allows you to start a process that watches for overdue items
+and prints them to the terminal.
+
+Start it using something like:
+
+```fish
+fish -c "todo watch -d 5mins" &
+```
+
+This will send the process to the background of the current terminal session.
+It will allow you to keep using that terminal session for other commands. Just
+note that if todo prints at the same time as something else the output will
+become interspersed.
+
+Kill it using:
+
+```fish
+kill $(pgrep todo)
+```

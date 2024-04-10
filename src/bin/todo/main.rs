@@ -24,6 +24,8 @@ enum ToDoCommands {
     List(commands::ListArgs),
     /// Delete a todo.
     Rm(commands::RemoveArgs),
+    /// Watch for overdue todos
+    Watch(commands::WatchArgs),
 }
 
 fn main() {
@@ -37,6 +39,7 @@ fn main() {
         ToDoCommands::Go(go_args) => go_args.run(),
         ToDoCommands::List(list_args) => list_args.run(),
         ToDoCommands::Rm(rm_args) => rm_args.run(),
+        ToDoCommands::Watch(watch_args) => watch_args.run(),
     };
 
     if let Err(e) = result {

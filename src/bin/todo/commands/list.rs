@@ -1,6 +1,6 @@
 use chrono::NaiveDateTime;
 use clap::Args;
-use todo::prelude::{Status, *};
+use todo::prelude::*;
 
 use crate::commands::get_connection;
 
@@ -29,12 +29,12 @@ impl ListArgs {
         let conn = get_connection()?;
 
         let statuses = match (self.status_filter.all, self.status_filter.status) {
-            (false, None) => Some(vec![Status::ToDo, Status::InProgress]),
+            (false, None) => Some(Status::not_done().to_vec()),
             (true, _) => None,
             (_, Some(s)) => Some(s),
         };
 
-        let todos = list_todos(statuses, self.due, &conn)?;
+        let todos = list_todos(statuses.as_deref(), self.due, &conn)?;
         let todo_rows: Vec<ToDoRow> = todos.into_iter().map(|t| t.into()).collect();
         let table = tabled::Table::new(todo_rows);
         println!("{}", table);
