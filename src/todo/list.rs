@@ -6,15 +6,15 @@ use rusqlite::{Connection, Error};
 use crate::prelude::*;
 
 pub fn list_todos(
-    status: Option<Vec<Status>>,
+    status: Option<&[Status]>,
     datetime: Option<NaiveDateTime>,
     conn: &Connection,
 ) -> Result<Vec<ToDo>> {
-    let datetime_where = datetime.map(|d| format!("due<='{}'", d.to_string()));
+    let datetime_where = datetime.map(|d| format!("due<='{}'", d));
 
     let status_where = status.map(|s| {
         let v = s
-            .into_iter()
+            .iter()
             .map(|e| format!("'{}'", e))
             .collect::<Vec<String>>()
             .join(", ");

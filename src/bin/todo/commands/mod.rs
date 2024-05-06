@@ -4,6 +4,7 @@ pub mod go;
 pub mod init;
 pub mod list;
 pub mod rm;
+pub mod watch;
 
 use chrono::{Local, NaiveDateTime};
 use rusqlite::Connection;
@@ -11,6 +12,7 @@ use todo::{due::parse_given_datetime, prelude::*};
 
 pub use crate::commands::{
     add::AddArgs, edit::EditArgs, go::GoArgs, init::InitArgs, list::ListArgs, rm::RemoveArgs,
+    watch::WatchArgs,
 };
 
 pub fn get_connection() -> Result<Connection> {

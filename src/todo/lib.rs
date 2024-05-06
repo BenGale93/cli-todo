@@ -39,6 +39,12 @@ pub mod prelude {
         Done,
     }
 
+    impl Status {
+        pub const fn not_done() -> [Self; 2] {
+            [Self::ToDo, Self::InProgress]
+        }
+    }
+
     impl fmt::Display for Status {
         fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
             match self {
